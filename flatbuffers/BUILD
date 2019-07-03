@@ -2,6 +2,46 @@
 
 cc_library(
     name = 'flatbuffers',
-    prebuilt=True
+    srcs = [
+        'src/code_generators.cpp',
+        'src/flatc.cpp',
+        'src/flatc_main.cpp',
+        'src/flathash.cpp',
+        'src/idl_gen_cpp.cpp',
+        'src/idl_gen_dart.cpp',
+        'src/idl_gen_fbs.cpp',
+        'src/idl_gen_general.cpp',
+        'src/idl_gen_go.cpp',
+        #'src/idl_gen_grpc.cpp',
+        'src/idl_gen_json_schema.cpp',
+        'src/idl_gen_js_ts.cpp',
+        'src/idl_gen_lobster.cpp',
+        'src/idl_gen_lua.cpp',
+        'src/idl_gen_php.cpp',
+        'src/idl_gen_python.cpp',
+        'src/idl_gen_rust.cpp',
+        'src/idl_gen_text.cpp',
+        'src/idl_parser.cpp',
+        'src/reflection.cpp',
+        'src/util.cpp',
+    ],
+    defs = [
+        'NDEBUG'
+    ]
 )
-
+cc_binary(
+    name = 'alltests',
+    srcs = [
+        #'monster_test.grpc.fb.cc',
+        'tests/test_assert.cpp',
+        'tests/test_builder.cpp',
+        'tests/test.cpp',
+        'src/idl_gen_fbs.cpp',
+    ],
+	incs = [
+        'tests'
+	],
+    deps = [
+        "//thirdparty/flatbuffers:flatbuffers"
+    ],
+)
