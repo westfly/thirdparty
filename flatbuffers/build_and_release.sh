@@ -7,7 +7,14 @@ function select_compiler() {
 function cmake_build() {
     source_dir=$1
     select_compiler
-    cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release $source_dir
+    build=$source_dir/build
+    if [[ ! -d $build ]];then
+        mkdir $build
+    fi
+    cd $build
+    cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ../
+    make -j3;make
+    cd -
 }
 function deploy() {
     source_dir=$1
