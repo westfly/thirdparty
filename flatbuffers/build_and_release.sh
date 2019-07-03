@@ -23,11 +23,11 @@ function deploy() {
     if [[ ! -d $deploy/bin ]];then
         mkdir $deploy/bin
     fi
-    cp $source_dir/flat* $deploy/bin/
+    cp $source_dir/build/flat* $deploy/bin/
     if [[ ! -d $deploy/lib64_release ]];then
         mkdir $deploy/lib64_release
     fi
-    cp $source_dir/lib*a $deploy/lib64_release
+    cp $source_dir/build/lib*a $deploy/lib64_release
 }
 source_dir=$1
 cmake_build $source_dir
