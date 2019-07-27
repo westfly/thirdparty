@@ -1,3 +1,6 @@
 [submodule "libtree"]
 	path = libtree
 	url = git@github.com:westfly/libtree.git
+[submodule "ps-lite"]
+	path = ps-lite
+	url = git@github.com:westfly/ps-lite.git
