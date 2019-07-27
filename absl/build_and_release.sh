@@ -34,7 +34,7 @@ function deploy() {
     source_dir=$1/release
     deploy=$2
     cp $source_dir/include/absl/* -a $deploy
-    cp $source_dir/lib64 -a $deploy/lib64_release
+    cp $source_dir/lib64/* -a $deploy/lib64_release
 	make_single_lib $deploy/lib64_release
 }
 source_dir=$1
