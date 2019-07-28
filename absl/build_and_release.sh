@@ -15,9 +15,16 @@ function cmake_build() {
     if [[ -f CMakeCache.txt ]];then
         rm CMakeCache.txt
     fi
-    cmake3 -DCMAKE_INSTALL_PREFIX=../release -DCMAKE_BUILD_TYPE=Release ../
-    make -j30;make
-    make install
+    if [[ 0 -eq 1 ]]; then
+        cmake3 -DCMAKE_INSTALL_PREFIX=../release -DCMAKE_BUILD_TYPE=Release ../
+        make -j30;make
+        make install
+    else
+        cmake3 -G 'Ninja' -DCMAKE_CXX_STANDARD=CXX17 \
+                          -DCMAKE_INSTALL_PREFIX=../release \
+                          -DCMAKE_BUILD_TYPE=Release ../
+        ninja install
+    fi
     cd -
 }
 function make_single_lib() {

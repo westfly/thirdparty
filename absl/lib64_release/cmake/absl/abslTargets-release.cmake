@@ -5,6 +5,16 @@
 # Commands may need to know the format version.
 set(CMAKE_IMPORT_FILE_VERSION 1)
 
+# Import target "absl::log_severity" for configuration "Release"
+set_property(TARGET absl::log_severity APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(absl::log_severity PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib64/libabsl_log_severity.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS absl::log_severity )
+list(APPEND _IMPORT_CHECK_FILES_FOR_absl::log_severity "${_IMPORT_PREFIX}/lib64/libabsl_log_severity.a" )
+
 # Import target "absl::spinlock_wait" for configuration "Release"
 set_property(TARGET absl::spinlock_wait APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(absl::spinlock_wait PROPERTIES
@@ -224,6 +234,16 @@ set_target_properties(absl::flags PROPERTIES
 
 list(APPEND _IMPORT_CHECK_TARGETS absl::flags )
 list(APPEND _IMPORT_CHECK_FILES_FOR_absl::flags "${_IMPORT_PREFIX}/lib64/libabsl_flags.a" )
+
+# Import target "absl::flags_usage_internal" for configuration "Release"
+set_property(TARGET absl::flags_usage_internal APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(absl::flags_usage_internal PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib64/libabsl_flags_usage_internal.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS absl::flags_usage_internal )
+list(APPEND _IMPORT_CHECK_FILES_FOR_absl::flags_usage_internal "${_IMPORT_PREFIX}/lib64/libabsl_flags_usage_internal.a" )
 
 # Import target "absl::flags_usage" for configuration "Release"
 set_property(TARGET absl::flags_usage APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)

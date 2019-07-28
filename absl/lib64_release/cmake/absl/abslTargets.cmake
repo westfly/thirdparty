@@ -16,7 +16,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget absl::spinlock_wait absl::config absl::dynamic_annotations absl::core_headers absl::malloc_internal absl::base_internal absl::base absl::throw_delegate absl::pretty_function absl::endian absl::bits absl::scoped_set_env absl::algorithm absl::algorithm_container absl::container absl::compressed_tuple absl::fixed_array absl::inlined_vector_internal absl::inlined_vector absl::counting_allocator absl::flat_hash_map absl::flat_hash_set absl::node_hash_map absl::node_hash_set absl::container_memory absl::hash_function_defaults absl::hash_policy_traits absl::hashtablez_sampler absl::hashtable_debug absl::hashtable_debug_hooks absl::have_sse absl::node_hash_policy absl::raw_hash_map absl::container_common absl::raw_hash_set absl::layout absl::stacktrace absl::symbolize absl::examine_stack absl::failure_signal_handler absl::debugging_internal absl::demangle_internal absl::leak_check absl::leak_check_disable absl::debugging absl::flags_internal absl::flags_config absl::flags_marshalling absl::flags_handle absl::flags_registry absl::flags absl::flags_usage absl::flags_parse absl::hash absl::city absl::memory absl::type_traits absl::meta absl::int128 absl::numeric absl::strings absl::strings_internal absl::str_format absl::str_format_internal absl::graphcycles_internal absl::synchronization absl::time absl::civil_time absl::time_zone absl::any absl::bad_any_cast absl::bad_any_cast_impl absl::span absl::optional absl::bad_optional_access absl::bad_variant_access absl::variant absl::compare absl::utility)
+foreach(_expectedTarget absl::atomic_hook absl::log_severity absl::spinlock_wait absl::config absl::dynamic_annotations absl::core_headers absl::malloc_internal absl::base_internal absl::base absl::throw_delegate absl::pretty_function absl::endian absl::bits absl::scoped_set_env absl::algorithm absl::algorithm_container absl::container absl::compressed_tuple absl::fixed_array absl::inlined_vector_internal absl::inlined_vector absl::counting_allocator absl::flat_hash_map absl::flat_hash_set absl::node_hash_map absl::node_hash_set absl::container_memory absl::hash_function_defaults absl::hash_policy_traits absl::hashtablez_sampler absl::hashtable_debug absl::hashtable_debug_hooks absl::have_sse absl::node_hash_policy absl::raw_hash_map absl::container_common absl::raw_hash_set absl::layout absl::stacktrace absl::symbolize absl::examine_stack absl::failure_signal_handler absl::debugging_internal absl::demangle_internal absl::leak_check absl::leak_check_disable absl::debugging absl::flags_internal absl::flags_config absl::flags_marshalling absl::flags_handle absl::flags_registry absl::flags absl::flags_usage_internal absl::flags_usage absl::flags_parse absl::hash absl::city absl::memory absl::type_traits absl::meta absl::int128 absl::numeric absl::strings absl::strings_internal absl::str_format absl::str_format_internal absl::graphcycles_internal absl::synchronization absl::time absl::civil_time absl::time_zone absl::any absl::bad_any_cast absl::bad_any_cast_impl absl::span absl::optional absl::bad_optional_access absl::bad_variant_access absl::variant absl::compare absl::utility)
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -46,6 +46,21 @@ get_filename_component(_IMPORT_PREFIX "${CMAKE_CURRENT_LIST_FILE}" PATH)
 get_filename_component(_IMPORT_PREFIX "${_IMPORT_PREFIX}" PATH)
 get_filename_component(_IMPORT_PREFIX "${_IMPORT_PREFIX}" PATH)
 get_filename_component(_IMPORT_PREFIX "${_IMPORT_PREFIX}" PATH)
+
+# Create imported target absl::atomic_hook
+add_library(absl::atomic_hook INTERFACE IMPORTED)
+
+set_target_properties(absl::atomic_hook PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+)
+
+# Create imported target absl::log_severity
+add_library(absl::log_severity STATIC IMPORTED)
+
+set_target_properties(absl::log_severity PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::core_headers"
+)
 
 # Create imported target absl::spinlock_wait
 add_library(absl::spinlock_wait STATIC IMPORTED)
@@ -98,7 +113,7 @@ add_library(absl::base STATIC IMPORTED)
 
 set_target_properties(absl::base PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::base_internal;absl::config;absl::core_headers;absl::dynamic_annotations;absl::spinlock_wait;absl::type_traits;Threads::Threads"
+  INTERFACE_LINK_LIBRARIES "absl::atomic_hook;absl::base_internal;absl::config;absl::core_headers;absl::dynamic_annotations;absl::log_severity;absl::spinlock_wait;absl::type_traits;Threads::Threads"
 )
 
 # Create imported target absl::throw_delegate
@@ -445,12 +460,20 @@ set_target_properties(absl::flags PROPERTIES
   INTERFACE_LINK_LIBRARIES "absl::flags_config;absl::flags_handle;absl::flags_marshalling;absl::flags_registry;absl::base;absl::core_headers;absl::strings"
 )
 
+# Create imported target absl::flags_usage_internal
+add_library(absl::flags_usage_internal STATIC IMPORTED)
+
+set_target_properties(absl::flags_usage_internal PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::flags_config;absl::flags;absl::flags_handle;absl::flags_internal;absl::strings;absl::synchronization"
+)
+
 # Create imported target absl::flags_usage
 add_library(absl::flags_usage STATIC IMPORTED)
 
 set_target_properties(absl::flags_usage PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::flags_config;absl::flags;absl::flags_handle;absl::flags_internal;absl::strings;absl::synchronization"
+  INTERFACE_LINK_LIBRARIES "absl::flags_usage_internal;absl::strings;absl::synchronization"
 )
 
 # Create imported target absl::flags_parse
@@ -562,7 +585,7 @@ add_library(absl::synchronization STATIC IMPORTED)
 
 set_target_properties(absl::synchronization PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::graphcycles_internal;absl::base;absl::base_internal;absl::config;absl::core_headers;absl::dynamic_annotations;absl::malloc_internal;absl::stacktrace;absl::symbolize;absl::time;Threads::Threads"
+  INTERFACE_LINK_LIBRARIES "absl::graphcycles_internal;absl::atomic_hook;absl::base;absl::base_internal;absl::config;absl::core_headers;absl::dynamic_annotations;absl::malloc_internal;absl::stacktrace;absl::symbolize;absl::time;Threads::Threads"
 )
 
 # Create imported target absl::time
