@@ -4,3 +4,6 @@
 [submodule "ps-lite"]
 	path = ps-lite
 	url = git@github.com:westfly/ps-lite.git
+[submodule "concurrentqueue"]
+	path = concurrentqueue
+	url = https://github.com/cameron314/concurrentqueue
