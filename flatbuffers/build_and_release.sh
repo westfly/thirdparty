@@ -12,8 +12,13 @@ function cmake_build() {
         mkdir $build
     fi
     cd $build
-    cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ../
-    make -j3;make
+    if [[ 0 -eq 1 ]];then
+        cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ../
+        make -j3;make
+    else
+        cmake3 -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../
+        ninja
+    fi
     cd -
 }
 function deploy() {
