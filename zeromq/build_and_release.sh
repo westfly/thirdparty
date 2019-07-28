@@ -11,9 +11,17 @@ function cmake_build() {
         mkdir $build
     fi
     cd $build
+	if [[ -f CMakeCache.txt ]];then
+        rm CMakeCache.txt
+    fi
     select_compiler
-    cmake -G "Unix Makefiles" -DZMQ_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release ../
-    make -j30;make
+    if [[ 0 -eq 1 ]];then
+        cmake -G "Unix Makefiles" -DZMQ_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release ../
+        make -j30;make
+    else
+        cmake -G "Ninja" -DZMQ_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release ../
+        ninja
+    fi
     cd -
 }
 function deploy() {
