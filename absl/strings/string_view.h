@@ -50,6 +50,7 @@ using std::string_view;
 
 #include "absl/base/internal/throw_delegate.h"
 #include "absl/base/macros.h"
+#include "absl/base/optimization.h"
 #include "absl/base/port.h"
 
 namespace absl {
@@ -172,19 +173,9 @@ class string_view {
   // Implicit constructor of a `string_view` from nul-terminated `str`. When
   // accepting possibly null strings, use `absl::NullSafeStringView(str)`
   // instead (see below).
-#if ABSL_HAVE_BUILTIN(__builtin_strlen) || \
-    (defined(__GNUC__) && !defined(__clang__))
-  // GCC has __builtin_strlen according to
-  // https://gcc.gnu.org/onlinedocs/gcc-4.7.0/gcc/Other-Builtins.html, but
-  // ABSL_HAVE_BUILTIN doesn't detect that, so we use the extra checks above.
-  // __builtin_strlen is constexpr.
   constexpr string_view(const char* str)  // NOLINT(runtime/explicit)
       : ptr_(str),
-        length_(CheckLengthInternal(str ? __builtin_strlen(str) : 0)) {}
-#else
-  constexpr string_view(const char* str)  // NOLINT(runtime/explicit)
-      : ptr_(str), length_(CheckLengthInternal(str ? strlen(str) : 0)) {}
-#endif
+        length_(str ? CheckLengthInternal(StrlenInternal(str)) : 0) {}
 
   // Implicit constructor of a `string_view` from a `const char*` and length.
   constexpr string_view(const char* data, size_type len)
@@ -278,9 +269,21 @@ class string_view {
 
   // string_view::operator[]
   //
-  // Returns the ith element of an `string_view` using the array operator.
+  // Returns the ith element of the `string_view` using the array operator.
   // Note that this operator does not perform any bounds checking.
   constexpr const_reference operator[](size_type i) const { return ptr_[i]; }
+
+  // string_view::at()
+  //
+  // Returns the ith element of the `string_view`. Bounds checking is performed,
+  // and an exception of type `std::out_of_range` will be thrown on invalid
+  // access.
+  constexpr const_reference at(size_type i) const {
+    return ABSL_PREDICT_TRUE(i < size())
+               ? ptr_[i]
+               : (base_internal::ThrowStdOutOfRange("absl::string_view::at"),
+                  ptr_[i]);
+  }
 
   // string_view::front()
   //
@@ -344,7 +347,17 @@ class string_view {
   //
   // Copies the contents of the `string_view` at offset `pos` and length `n`
   // into `buf`.
-  size_type copy(char* buf, size_type n, size_type pos = 0) const;
+  size_type copy(char* buf, size_type n, size_type pos = 0) const {
+    if (ABSL_PREDICT_FALSE(pos > length_)) {
+      base_internal::ThrowStdOutOfRange("absl::string_view::copy");
+    }
+    size_type rlen = (std::min)(length_ - pos, n);
+    if (rlen > 0) {
+      const char* start = ptr_ + pos;
+      traits_type::copy(buf, start, rlen);
+    }
+    return rlen;
+  }
 
   // string_view::substr()
   //
@@ -493,6 +506,24 @@ class string_view {
 
   static constexpr size_type CheckLengthInternal(size_type len) {
     return ABSL_ASSERT(len <= kMaxSize), len;
+  }
+
+  static constexpr size_type StrlenInternal(const char* str) {
+#if defined(_MSC_VER) && _MSC_VER >= 1910 && !defined(__clang__)
+    // MSVC 2017+ can evaluate this at compile-time.
+    const char* begin = str;
+    while (*str != '\0') ++str;
+    return str - begin;
+#elif ABSL_HAVE_BUILTIN(__builtin_strlen) || \
+    (defined(__GNUC__) && !defined(__clang__))
+    // GCC has __builtin_strlen according to
+    // https://gcc.gnu.org/onlinedocs/gcc-4.7.0/gcc/Other-Builtins.html, but
+    // ABSL_HAVE_BUILTIN doesn't detect that, so we use the extra checks above.
+    // __builtin_strlen is constexpr.
+    return __builtin_strlen(str);
+#else
+    return str ? strlen(str) : 0;
+#endif
   }
 
   const char* ptr_;

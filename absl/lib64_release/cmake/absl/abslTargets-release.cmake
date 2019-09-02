@@ -15,6 +15,16 @@ set_target_properties(absl::log_severity PROPERTIES
 list(APPEND _IMPORT_CHECK_TARGETS absl::log_severity )
 list(APPEND _IMPORT_CHECK_FILES_FOR_absl::log_severity "${_IMPORT_PREFIX}/lib64/libabsl_log_severity.a" )
 
+# Import target "absl::raw_logging_internal" for configuration "Release"
+set_property(TARGET absl::raw_logging_internal APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(absl::raw_logging_internal PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib64/libabsl_raw_logging_internal.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS absl::raw_logging_internal )
+list(APPEND _IMPORT_CHECK_FILES_FOR_absl::raw_logging_internal "${_IMPORT_PREFIX}/lib64/libabsl_raw_logging_internal.a" )
+
 # Import target "absl::spinlock_wait" for configuration "Release"
 set_property(TARGET absl::spinlock_wait APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(absl::spinlock_wait PROPERTIES
@@ -294,6 +304,106 @@ set_target_properties(absl::int128 PROPERTIES
 
 list(APPEND _IMPORT_CHECK_TARGETS absl::int128 )
 list(APPEND _IMPORT_CHECK_FILES_FOR_absl::int128 "${_IMPORT_PREFIX}/lib64/libabsl_int128.a" )
+
+# Import target "absl::random_distributions" for configuration "Release"
+set_property(TARGET absl::random_distributions APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(absl::random_distributions PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib64/libabsl_random_distributions.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS absl::random_distributions )
+list(APPEND _IMPORT_CHECK_FILES_FOR_absl::random_distributions "${_IMPORT_PREFIX}/lib64/libabsl_random_distributions.a" )
+
+# Import target "absl::random_seed_gen_exception" for configuration "Release"
+set_property(TARGET absl::random_seed_gen_exception APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(absl::random_seed_gen_exception PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib64/libabsl_random_seed_gen_exception.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS absl::random_seed_gen_exception )
+list(APPEND _IMPORT_CHECK_FILES_FOR_absl::random_seed_gen_exception "${_IMPORT_PREFIX}/lib64/libabsl_random_seed_gen_exception.a" )
+
+# Import target "absl::random_seed_sequences" for configuration "Release"
+set_property(TARGET absl::random_seed_sequences APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(absl::random_seed_sequences PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib64/libabsl_random_seed_sequences.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS absl::random_seed_sequences )
+list(APPEND _IMPORT_CHECK_FILES_FOR_absl::random_seed_sequences "${_IMPORT_PREFIX}/lib64/libabsl_random_seed_sequences.a" )
+
+# Import target "absl::random_internal_seed_material" for configuration "Release"
+set_property(TARGET absl::random_internal_seed_material APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(absl::random_internal_seed_material PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib64/libabsl_random_internal_seed_material.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS absl::random_internal_seed_material )
+list(APPEND _IMPORT_CHECK_FILES_FOR_absl::random_internal_seed_material "${_IMPORT_PREFIX}/lib64/libabsl_random_internal_seed_material.a" )
+
+# Import target "absl::random_internal_pool_urbg" for configuration "Release"
+set_property(TARGET absl::random_internal_pool_urbg APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(absl::random_internal_pool_urbg PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib64/libabsl_random_internal_pool_urbg.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS absl::random_internal_pool_urbg )
+list(APPEND _IMPORT_CHECK_FILES_FOR_absl::random_internal_pool_urbg "${_IMPORT_PREFIX}/lib64/libabsl_random_internal_pool_urbg.a" )
+
+# Import target "absl::random_internal_randen" for configuration "Release"
+set_property(TARGET absl::random_internal_randen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(absl::random_internal_randen PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib64/libabsl_random_internal_randen.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS absl::random_internal_randen )
+list(APPEND _IMPORT_CHECK_FILES_FOR_absl::random_internal_randen "${_IMPORT_PREFIX}/lib64/libabsl_random_internal_randen.a" )
+
+# Import target "absl::random_internal_randen_slow" for configuration "Release"
+set_property(TARGET absl::random_internal_randen_slow APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(absl::random_internal_randen_slow PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib64/libabsl_random_internal_randen_slow.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS absl::random_internal_randen_slow )
+list(APPEND _IMPORT_CHECK_FILES_FOR_absl::random_internal_randen_slow "${_IMPORT_PREFIX}/lib64/libabsl_random_internal_randen_slow.a" )
+
+# Import target "absl::random_internal_randen_hwaes" for configuration "Release"
+set_property(TARGET absl::random_internal_randen_hwaes APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(absl::random_internal_randen_hwaes PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib64/libabsl_random_internal_randen_hwaes.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS absl::random_internal_randen_hwaes )
+list(APPEND _IMPORT_CHECK_FILES_FOR_absl::random_internal_randen_hwaes "${_IMPORT_PREFIX}/lib64/libabsl_random_internal_randen_hwaes.a" )
+
+# Import target "absl::random_internal_randen_hwaes_impl" for configuration "Release"
+set_property(TARGET absl::random_internal_randen_hwaes_impl APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(absl::random_internal_randen_hwaes_impl PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib64/libabsl_random_internal_randen_hwaes_impl.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS absl::random_internal_randen_hwaes_impl )
+list(APPEND _IMPORT_CHECK_FILES_FOR_absl::random_internal_randen_hwaes_impl "${_IMPORT_PREFIX}/lib64/libabsl_random_internal_randen_hwaes_impl.a" )
+
+# Import target "absl::random_internal_distribution_test_util" for configuration "Release"
+set_property(TARGET absl::random_internal_distribution_test_util APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(absl::random_internal_distribution_test_util PROPERTIES
+  IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+  IMPORTED_LOCATION_RELEASE "${_IMPORT_PREFIX}/lib64/libabsl_random_internal_distribution_test_util.a"
+  )
+
+list(APPEND _IMPORT_CHECK_TARGETS absl::random_internal_distribution_test_util )
+list(APPEND _IMPORT_CHECK_FILES_FOR_absl::random_internal_distribution_test_util "${_IMPORT_PREFIX}/lib64/libabsl_random_internal_distribution_test_util.a" )
 
 # Import target "absl::strings" for configuration "Release"
 set_property(TARGET absl::strings APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)

@@ -16,7 +16,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget absl::atomic_hook absl::log_severity absl::spinlock_wait absl::config absl::dynamic_annotations absl::core_headers absl::malloc_internal absl::base_internal absl::base absl::throw_delegate absl::pretty_function absl::endian absl::bits absl::scoped_set_env absl::algorithm absl::algorithm_container absl::container absl::compressed_tuple absl::fixed_array absl::inlined_vector_internal absl::inlined_vector absl::counting_allocator absl::flat_hash_map absl::flat_hash_set absl::node_hash_map absl::node_hash_set absl::container_memory absl::hash_function_defaults absl::hash_policy_traits absl::hashtablez_sampler absl::hashtable_debug absl::hashtable_debug_hooks absl::have_sse absl::node_hash_policy absl::raw_hash_map absl::container_common absl::raw_hash_set absl::layout absl::stacktrace absl::symbolize absl::examine_stack absl::failure_signal_handler absl::debugging_internal absl::demangle_internal absl::leak_check absl::leak_check_disable absl::debugging absl::flags_internal absl::flags_config absl::flags_marshalling absl::flags_handle absl::flags_registry absl::flags absl::flags_usage_internal absl::flags_usage absl::flags_parse absl::hash absl::city absl::memory absl::type_traits absl::meta absl::int128 absl::numeric absl::strings absl::strings_internal absl::str_format absl::str_format_internal absl::graphcycles_internal absl::synchronization absl::time absl::civil_time absl::time_zone absl::any absl::bad_any_cast absl::bad_any_cast_impl absl::span absl::optional absl::bad_optional_access absl::bad_variant_access absl::variant absl::compare absl::utility)
+foreach(_expectedTarget absl::atomic_hook absl::log_severity absl::raw_logging_internal absl::spinlock_wait absl::config absl::dynamic_annotations absl::core_headers absl::malloc_internal absl::base_internal absl::base absl::throw_delegate absl::pretty_function absl::endian absl::bits absl::scoped_set_env absl::algorithm absl::algorithm_container absl::container absl::btree absl::compressed_tuple absl::fixed_array absl::inlined_vector_internal absl::inlined_vector absl::counting_allocator absl::flat_hash_map absl::flat_hash_set absl::node_hash_map absl::node_hash_set absl::container_memory absl::hash_function_defaults absl::hash_policy_traits absl::hashtablez_sampler absl::hashtable_debug absl::hashtable_debug_hooks absl::have_sse absl::node_hash_policy absl::raw_hash_map absl::container_common absl::raw_hash_set absl::layout absl::stacktrace absl::symbolize absl::examine_stack absl::failure_signal_handler absl::debugging_internal absl::demangle_internal absl::leak_check absl::leak_check_disable absl::debugging absl::flags_internal absl::flags_config absl::flags_marshalling absl::flags_handle absl::flags_registry absl::flags absl::flags_usage_internal absl::flags_usage absl::flags_parse absl::hash absl::city absl::memory absl::type_traits absl::meta absl::int128 absl::numeric absl::random_random absl::random_distributions absl::random_seed_gen_exception absl::random_seed_sequences absl::random_internal_traits absl::random_internal_distribution_caller absl::random_internal_distributions absl::random_internal_fast_uniform_bits absl::random_internal_seed_material absl::random_internal_pool_urbg absl::random_internal_salted_seed_seq absl::random_internal_iostream_state_saver absl::random_internal_distribution_impl absl::random_internal_fastmath absl::random_internal_nonsecure_base absl::random_internal_pcg_engine absl::random_internal_randen_engine absl::random_internal_platform absl::random_internal_randen absl::random_internal_randen_slow absl::random_internal_randen_hwaes absl::random_internal_randen_hwaes_impl absl::random_internal_distribution_test_util absl::random_internal_uniform_helper absl::strings absl::strings_internal absl::str_format absl::str_format_internal absl::graphcycles_internal absl::synchronization absl::time absl::civil_time absl::time_zone absl::any absl::bad_any_cast absl::bad_any_cast_impl absl::span absl::optional absl::bad_optional_access absl::bad_variant_access absl::variant absl::compare absl::utility)
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -62,6 +62,14 @@ set_target_properties(absl::log_severity PROPERTIES
   INTERFACE_LINK_LIBRARIES "absl::core_headers"
 )
 
+# Create imported target absl::raw_logging_internal
+add_library(absl::raw_logging_internal STATIC IMPORTED)
+
+set_target_properties(absl::raw_logging_internal PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::atomic_hook;absl::config;absl::core_headers;absl::log_severity"
+)
+
 # Create imported target absl::spinlock_wait
 add_library(absl::spinlock_wait STATIC IMPORTED)
 
@@ -98,7 +106,7 @@ add_library(absl::malloc_internal STATIC IMPORTED)
 
 set_target_properties(absl::malloc_internal PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::base;absl::config;absl::core_headers;absl::dynamic_annotations;absl::spinlock_wait;Threads::Threads"
+  INTERFACE_LINK_LIBRARIES "absl::base;absl::config;absl::core_headers;absl::dynamic_annotations;absl::raw_logging_internal;absl::spinlock_wait;Threads::Threads"
 )
 
 # Create imported target absl::base_internal
@@ -106,6 +114,7 @@ add_library(absl::base_internal INTERFACE IMPORTED)
 
 set_target_properties(absl::base_internal PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::type_traits"
 )
 
 # Create imported target absl::base
@@ -113,7 +122,7 @@ add_library(absl::base STATIC IMPORTED)
 
 set_target_properties(absl::base PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::atomic_hook;absl::base_internal;absl::config;absl::core_headers;absl::dynamic_annotations;absl::log_severity;absl::spinlock_wait;absl::type_traits;Threads::Threads"
+  INTERFACE_LINK_LIBRARIES "absl::atomic_hook;absl::base_internal;absl::config;absl::core_headers;absl::dynamic_annotations;absl::log_severity;absl::raw_logging_internal;absl::spinlock_wait;absl::type_traits;Threads::Threads"
 )
 
 # Create imported target absl::throw_delegate
@@ -121,7 +130,7 @@ add_library(absl::throw_delegate STATIC IMPORTED)
 
 set_target_properties(absl::throw_delegate PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::base"
+  INTERFACE_LINK_LIBRARIES "absl::config;absl::raw_logging_internal"
 )
 
 # Create imported target absl::pretty_function
@@ -152,7 +161,7 @@ add_library(absl::scoped_set_env STATIC IMPORTED)
 
 set_target_properties(absl::scoped_set_env PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::base"
+  INTERFACE_LINK_LIBRARIES "absl::raw_logging_internal"
 )
 
 # Create imported target absl::algorithm
@@ -175,6 +184,14 @@ add_library(absl::container INTERFACE IMPORTED)
 
 set_target_properties(absl::container PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+)
+
+# Create imported target absl::btree
+add_library(absl::btree INTERFACE IMPORTED)
+
+set_target_properties(absl::btree PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::container_common;absl::compare;absl::compressed_tuple;absl::container_memory;absl::core_headers;absl::layout;absl::memory;absl::strings;absl::throw_delegate;absl::type_traits;absl::utility"
 )
 
 # Create imported target absl::compressed_tuple
@@ -314,7 +331,7 @@ add_library(absl::raw_hash_map INTERFACE IMPORTED)
 
 set_target_properties(absl::raw_hash_map PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::container_memory;absl::raw_hash_set"
+  INTERFACE_LINK_LIBRARIES "absl::container_memory;absl::raw_hash_set;absl::throw_delegate"
 )
 
 # Create imported target absl::container_common
@@ -346,7 +363,7 @@ add_library(absl::stacktrace STATIC IMPORTED)
 
 set_target_properties(absl::stacktrace PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::debugging_internal;absl::base;absl::core_headers"
+  INTERFACE_LINK_LIBRARIES "absl::debugging_internal;absl::core_headers"
 )
 
 # Create imported target absl::symbolize
@@ -354,7 +371,7 @@ add_library(absl::symbolize STATIC IMPORTED)
 
 set_target_properties(absl::symbolize PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::debugging_internal;absl::demangle_internal;absl::base;absl::core_headers;absl::dynamic_annotations;absl::malloc_internal"
+  INTERFACE_LINK_LIBRARIES "absl::debugging_internal;absl::demangle_internal;absl::base;absl::core_headers;absl::dynamic_annotations;absl::malloc_internal;absl::raw_logging_internal"
 )
 
 # Create imported target absl::examine_stack
@@ -362,7 +379,7 @@ add_library(absl::examine_stack STATIC IMPORTED)
 
 set_target_properties(absl::examine_stack PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::stacktrace;absl::symbolize;absl::base;absl::core_headers"
+  INTERFACE_LINK_LIBRARIES "absl::stacktrace;absl::symbolize;absl::core_headers;absl::raw_logging_internal"
 )
 
 # Create imported target absl::failure_signal_handler
@@ -370,7 +387,7 @@ add_library(absl::failure_signal_handler STATIC IMPORTED)
 
 set_target_properties(absl::failure_signal_handler PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::examine_stack;absl::stacktrace;absl::base;absl::config;absl::core_headers"
+  INTERFACE_LINK_LIBRARIES "absl::examine_stack;absl::stacktrace;absl::base;absl::config;absl::core_headers;absl::raw_logging_internal"
 )
 
 # Create imported target absl::debugging_internal
@@ -378,7 +395,7 @@ add_library(absl::debugging_internal STATIC IMPORTED)
 
 set_target_properties(absl::debugging_internal PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::base;absl::core_headers;absl::dynamic_annotations"
+  INTERFACE_LINK_LIBRARIES "absl::core_headers;absl::dynamic_annotations;absl::raw_logging_internal"
 )
 
 # Create imported target absl::demangle_internal
@@ -441,7 +458,7 @@ add_library(absl::flags_handle STATIC IMPORTED)
 
 set_target_properties(absl::flags_handle PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::flags_config;absl::flags_marshalling;absl::base;absl::core_headers;absl::strings;absl::synchronization;absl::optional"
+  INTERFACE_LINK_LIBRARIES "absl::flags_config;absl::flags_marshalling;absl::core_headers;absl::optional;absl::raw_logging_internal;absl::strings;absl::synchronization"
 )
 
 # Create imported target absl::flags_registry
@@ -449,7 +466,7 @@ add_library(absl::flags_registry STATIC IMPORTED)
 
 set_target_properties(absl::flags_registry PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::flags_config;absl::flags_handle;absl::base;absl::core_headers;absl::dynamic_annotations;absl::strings;absl::synchronization"
+  INTERFACE_LINK_LIBRARIES "absl::flags_config;absl::flags_handle;absl::core_headers;absl::dynamic_annotations;absl::raw_logging_internal;absl::strings;absl::synchronization"
 )
 
 # Create imported target absl::flags
@@ -457,7 +474,7 @@ add_library(absl::flags STATIC IMPORTED)
 
 set_target_properties(absl::flags PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::flags_config;absl::flags_handle;absl::flags_marshalling;absl::flags_registry;absl::base;absl::core_headers;absl::strings"
+  INTERFACE_LINK_LIBRARIES "absl::flags_config;absl::flags_handle;absl::flags_marshalling;absl::flags_registry;absl::base;absl::core_headers;absl::strings;absl::synchronization"
 )
 
 # Create imported target absl::flags_usage_internal
@@ -540,12 +557,201 @@ set_target_properties(absl::numeric PROPERTIES
   INTERFACE_LINK_LIBRARIES "absl::int128"
 )
 
+# Create imported target absl::random_random
+add_library(absl::random_random INTERFACE IMPORTED)
+
+set_target_properties(absl::random_random PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::random_distributions;absl::random_internal_nonsecure_base;absl::random_internal_pcg_engine;absl::random_internal_pool_urbg;absl::random_internal_randen_engine;absl::random_seed_sequences"
+)
+
+# Create imported target absl::random_distributions
+add_library(absl::random_distributions STATIC IMPORTED)
+
+set_target_properties(absl::random_distributions PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::base_internal;absl::core_headers;absl::random_internal_distribution_impl;absl::random_internal_distributions;absl::random_internal_fast_uniform_bits;absl::random_internal_fastmath;absl::random_internal_iostream_state_saver;absl::random_internal_traits;absl::random_internal_uniform_helper;absl::strings;absl::span;absl::type_traits"
+)
+
+# Create imported target absl::random_seed_gen_exception
+add_library(absl::random_seed_gen_exception STATIC IMPORTED)
+
+set_target_properties(absl::random_seed_gen_exception PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::config"
+)
+
+# Create imported target absl::random_seed_sequences
+add_library(absl::random_seed_sequences STATIC IMPORTED)
+
+set_target_properties(absl::random_seed_sequences PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::inlined_vector;absl::random_internal_nonsecure_base;absl::random_internal_pool_urbg;absl::random_internal_salted_seed_seq;absl::random_internal_seed_material;absl::random_seed_gen_exception;absl::span"
+)
+
+# Create imported target absl::random_internal_traits
+add_library(absl::random_internal_traits INTERFACE IMPORTED)
+
+set_target_properties(absl::random_internal_traits PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::config"
+)
+
+# Create imported target absl::random_internal_distribution_caller
+add_library(absl::random_internal_distribution_caller INTERFACE IMPORTED)
+
+set_target_properties(absl::random_internal_distribution_caller PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+)
+
+# Create imported target absl::random_internal_distributions
+add_library(absl::random_internal_distributions INTERFACE IMPORTED)
+
+set_target_properties(absl::random_internal_distributions PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::random_internal_distribution_caller;absl::random_internal_fast_uniform_bits;absl::random_internal_fastmath;absl::random_internal_traits;absl::random_internal_uniform_helper;absl::span;absl::strings;absl::type_traits"
+)
+
+# Create imported target absl::random_internal_fast_uniform_bits
+add_library(absl::random_internal_fast_uniform_bits INTERFACE IMPORTED)
+
+set_target_properties(absl::random_internal_fast_uniform_bits PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+)
+
+# Create imported target absl::random_internal_seed_material
+add_library(absl::random_internal_seed_material STATIC IMPORTED)
+
+set_target_properties(absl::random_internal_seed_material PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::core_headers;absl::optional;absl::random_internal_fast_uniform_bits;absl::raw_logging_internal;absl::span;absl::strings"
+)
+
+# Create imported target absl::random_internal_pool_urbg
+add_library(absl::random_internal_pool_urbg STATIC IMPORTED)
+
+set_target_properties(absl::random_internal_pool_urbg PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::base;absl::config;absl::core_headers;absl::endian;absl::random_internal_randen;absl::random_internal_seed_material;absl::random_internal_traits;absl::random_seed_gen_exception;absl::raw_logging_internal;absl::span"
+)
+
+# Create imported target absl::random_internal_salted_seed_seq
+add_library(absl::random_internal_salted_seed_seq INTERFACE IMPORTED)
+
+set_target_properties(absl::random_internal_salted_seed_seq PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::inlined_vector;absl::optional;absl::span;absl::random_internal_seed_material;absl::type_traits"
+)
+
+# Create imported target absl::random_internal_iostream_state_saver
+add_library(absl::random_internal_iostream_state_saver INTERFACE IMPORTED)
+
+set_target_properties(absl::random_internal_iostream_state_saver PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::int128;absl::type_traits"
+)
+
+# Create imported target absl::random_internal_distribution_impl
+add_library(absl::random_internal_distribution_impl INTERFACE IMPORTED)
+
+set_target_properties(absl::random_internal_distribution_impl PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::bits;absl::config;absl::int128;absl::random_internal_fastmath;absl::random_internal_traits"
+)
+
+# Create imported target absl::random_internal_fastmath
+add_library(absl::random_internal_fastmath INTERFACE IMPORTED)
+
+set_target_properties(absl::random_internal_fastmath PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::bits"
+)
+
+# Create imported target absl::random_internal_nonsecure_base
+add_library(absl::random_internal_nonsecure_base INTERFACE IMPORTED)
+
+set_target_properties(absl::random_internal_nonsecure_base PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::core_headers;absl::optional;absl::random_internal_pool_urbg;absl::random_internal_salted_seed_seq;absl::random_internal_seed_material;absl::span;absl::strings;absl::type_traits"
+)
+
+# Create imported target absl::random_internal_pcg_engine
+add_library(absl::random_internal_pcg_engine INTERFACE IMPORTED)
+
+set_target_properties(absl::random_internal_pcg_engine PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::config;absl::int128;absl::random_internal_fastmath;absl::random_internal_iostream_state_saver;absl::type_traits"
+)
+
+# Create imported target absl::random_internal_randen_engine
+add_library(absl::random_internal_randen_engine INTERFACE IMPORTED)
+
+set_target_properties(absl::random_internal_randen_engine PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::random_internal_iostream_state_saver;absl::random_internal_randen;absl::raw_logging_internal;absl::type_traits"
+)
+
+# Create imported target absl::random_internal_platform
+add_library(absl::random_internal_platform INTERFACE IMPORTED)
+
+set_target_properties(absl::random_internal_platform PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+)
+
+# Create imported target absl::random_internal_randen
+add_library(absl::random_internal_randen STATIC IMPORTED)
+
+set_target_properties(absl::random_internal_randen PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::random_internal_platform;absl::random_internal_randen_hwaes;absl::random_internal_randen_slow"
+)
+
+# Create imported target absl::random_internal_randen_slow
+add_library(absl::random_internal_randen_slow STATIC IMPORTED)
+
+set_target_properties(absl::random_internal_randen_slow PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::random_internal_platform"
+)
+
+# Create imported target absl::random_internal_randen_hwaes
+add_library(absl::random_internal_randen_hwaes STATIC IMPORTED)
+
+set_target_properties(absl::random_internal_randen_hwaes PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::random_internal_platform;absl::random_internal_randen_hwaes_impl"
+)
+
+# Create imported target absl::random_internal_randen_hwaes_impl
+add_library(absl::random_internal_randen_hwaes_impl STATIC IMPORTED)
+
+set_target_properties(absl::random_internal_randen_hwaes_impl PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::random_internal_platform"
+)
+
+# Create imported target absl::random_internal_distribution_test_util
+add_library(absl::random_internal_distribution_test_util STATIC IMPORTED)
+
+set_target_properties(absl::random_internal_distribution_test_util PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::core_headers;absl::raw_logging_internal;absl::strings;absl::str_format;absl::span"
+)
+
+# Create imported target absl::random_internal_uniform_helper
+add_library(absl::random_internal_uniform_helper INTERFACE IMPORTED)
+
+set_target_properties(absl::random_internal_uniform_helper PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_LINK_LIBRARIES "absl::core_headers;absl::random_internal_distribution_impl;absl::random_internal_fast_uniform_bits;absl::random_internal_iostream_state_saver;absl::random_internal_traits;absl::type_traits"
+)
+
 # Create imported target absl::strings
 add_library(absl::strings STATIC IMPORTED)
 
 set_target_properties(absl::strings PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::strings_internal;absl::base;absl::bits;absl::config;absl::core_headers;absl::endian;absl::throw_delegate;absl::memory;absl::type_traits;absl::int128"
+  INTERFACE_LINK_LIBRARIES "absl::strings_internal;absl::base;absl::bits;absl::config;absl::core_headers;absl::endian;absl::int128;absl::memory;absl::raw_logging_internal;absl::throw_delegate;absl::type_traits"
 )
 
 # Create imported target absl::strings_internal
@@ -577,7 +783,7 @@ add_library(absl::graphcycles_internal STATIC IMPORTED)
 
 set_target_properties(absl::graphcycles_internal PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::base;absl::base_internal;absl::core_headers;absl::malloc_internal"
+  INTERFACE_LINK_LIBRARIES "absl::base;absl::base_internal;absl::core_headers;absl::malloc_internal;absl::raw_logging_internal"
 )
 
 # Create imported target absl::synchronization
@@ -585,7 +791,7 @@ add_library(absl::synchronization STATIC IMPORTED)
 
 set_target_properties(absl::synchronization PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::graphcycles_internal;absl::atomic_hook;absl::base;absl::base_internal;absl::config;absl::core_headers;absl::dynamic_annotations;absl::malloc_internal;absl::stacktrace;absl::symbolize;absl::time;Threads::Threads"
+  INTERFACE_LINK_LIBRARIES "absl::graphcycles_internal;absl::atomic_hook;absl::base;absl::base_internal;absl::config;absl::core_headers;absl::dynamic_annotations;absl::malloc_internal;absl::raw_logging_internal;absl::stacktrace;absl::symbolize;absl::time;Threads::Threads"
 )
 
 # Create imported target absl::time
@@ -593,7 +799,7 @@ add_library(absl::time STATIC IMPORTED)
 
 set_target_properties(absl::time PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::base;absl::core_headers;absl::int128;absl::strings;absl::civil_time;absl::time_zone"
+  INTERFACE_LINK_LIBRARIES "absl::base;absl::civil_time;absl::core_headers;absl::int128;absl::raw_logging_internal;absl::strings;absl::time_zone"
 )
 
 # Create imported target absl::civil_time
@@ -632,7 +838,7 @@ add_library(absl::bad_any_cast_impl STATIC IMPORTED)
 
 set_target_properties(absl::bad_any_cast_impl PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::base;absl::config"
+  INTERFACE_LINK_LIBRARIES "absl::config;absl::raw_logging_internal"
 )
 
 # Create imported target absl::span
@@ -656,7 +862,7 @@ add_library(absl::bad_optional_access STATIC IMPORTED)
 
 set_target_properties(absl::bad_optional_access PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::base;absl::config"
+  INTERFACE_LINK_LIBRARIES "absl::config;absl::raw_logging_internal"
 )
 
 # Create imported target absl::bad_variant_access
@@ -664,7 +870,7 @@ add_library(absl::bad_variant_access STATIC IMPORTED)
 
 set_target_properties(absl::bad_variant_access PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "absl::base;absl::config"
+  INTERFACE_LINK_LIBRARIES "absl::config;absl::raw_logging_internal"
 )
 
 # Create imported target absl::variant
