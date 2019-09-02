@@ -68,18 +68,13 @@
 
 namespace absl {
 
-ABSL_INTERNAL_INLINE_CONSTEXPR(random_internal::IntervalClosedClosedT,
-                               IntervalClosedClosed, {});
-ABSL_INTERNAL_INLINE_CONSTEXPR(random_internal::IntervalClosedClosedT,
-                               IntervalClosed, {});
-ABSL_INTERNAL_INLINE_CONSTEXPR(random_internal::IntervalClosedOpenT,
-                               IntervalClosedOpen, {});
-ABSL_INTERNAL_INLINE_CONSTEXPR(random_internal::IntervalOpenOpenT,
-                               IntervalOpenOpen, {});
-ABSL_INTERNAL_INLINE_CONSTEXPR(random_internal::IntervalOpenOpenT,
-                               IntervalOpen, {});
-ABSL_INTERNAL_INLINE_CONSTEXPR(random_internal::IntervalOpenClosedT,
-                               IntervalOpenClosed, {});
+ABSL_INTERNAL_INLINE_CONSTEXPR(IntervalClosedClosedTag, IntervalClosedClosed,
+                               {});
+ABSL_INTERNAL_INLINE_CONSTEXPR(IntervalClosedClosedTag, IntervalClosed, {});
+ABSL_INTERNAL_INLINE_CONSTEXPR(IntervalClosedOpenTag, IntervalClosedOpen, {});
+ABSL_INTERNAL_INLINE_CONSTEXPR(IntervalOpenOpenTag, IntervalOpenOpen, {});
+ABSL_INTERNAL_INLINE_CONSTEXPR(IntervalOpenOpenTag, IntervalOpen, {});
+ABSL_INTERNAL_INLINE_CONSTEXPR(IntervalOpenClosedTag, IntervalOpenClosed, {});
 
 // -----------------------------------------------------------------------------
 // absl::Uniform<T>(tag, bitgen, lo, hi)
@@ -437,6 +432,6 @@ IntType Zipf(URBG&& urbg,  // NOLINT(runtime/references)
       distribution_t, format_t>(&urbg, hi, q, v);
 }
 
-}  // namespace absl.
+}  // namespace absl
 
 #endif  // ABSL_RANDOM_DISTRIBUTIONS_H_
