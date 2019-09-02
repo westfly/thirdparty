@@ -1653,10 +1653,9 @@ class FlatBufferBuilder {
   Offset<Vector<const T *>> CreateVectorOfNativeStructs(const S *v,
                                                         size_t len) {
     extern T Pack(const S &);
-    typedef T (*Pack_t)(const S &);
     std::vector<T> vv(len);
-    std::transform(v, v + len, vv.begin(), static_cast<Pack_t>(&Pack));
-    return CreateVectorOfStructs<T>(vv.data(), vv.size());
+    std::transform(v, v + len, vv.begin(), Pack);
+    return CreateVectorOfStructs<T>(data(vv), vv.size());
   }
 
   // clang-format off
