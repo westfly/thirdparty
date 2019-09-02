@@ -367,9 +367,14 @@ inline size_t InlineSize(const Type &type) {
 }
 
 inline size_t InlineAlignment(const Type &type) {
-  return IsStruct(type)
-             ? type.struct_def->minalign
-             : (SizeOf(IsArray(type) ? type.element : type.base_type));
+  if (IsStruct(type)) {
+    return type.struct_def->minalign;
+  } else if (IsArray(type)) {
+    return IsStruct(type.VectorType()) ? type.struct_def->minalign
+                                       : SizeOf(type.element);
+  } else {
+    return SizeOf(type.base_type);
+  }
 }
 
 struct EnumDef;
@@ -528,6 +533,7 @@ struct IDLOptions {
   bool size_prefixed;
   std::string root_type;
   bool force_defaults;
+  bool java_primitive_has_method;
   std::vector<std::string> cpp_includes;
 
   // Possible options for the more general generator below.
@@ -602,6 +608,7 @@ struct IDLOptions {
         protobuf_ascii_alike(false),
         size_prefixed(false),
         force_defaults(false),
+        java_primitive_has_method(false),
         lang(IDLOptions::kJava),
         mini_reflect(IDLOptions::kNone),
         lang_to_generate(0),
@@ -926,6 +933,8 @@ class Parser : public ParserState {
 // Utility functions for multiple generators:
 
 extern std::string MakeCamel(const std::string &in, bool first = true);
+
+extern std::string MakeScreamingCamel(const std::string &in);
 
 // Generate text (JSON) from a given FlatBuffer, and a given Parser
 // object that has been populated with the corresponding schema.
