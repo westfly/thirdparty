@@ -65,7 +65,7 @@ class HeapLeakCheckerGlobalPrePost {
       // MallocHook_InitAtFirstAllocation_HeapLeakChecker.  See malloc_hook.cc.
       // This is done in this roundabout fashion in order to avoid self-deadlock
       // if we directly called HeapLeakChecker_BeforeConstructors here.
-      delete new int;
+      //delete new int;
       // This needs to be called before the first allocation of an STL
       // object, but after libc is done setting up threads (because it
       // calls setenv, which requires a thread-aware errno).  By
