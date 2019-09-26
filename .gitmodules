@@ -7,3 +7,15 @@
 [submodule "concurrentqueue"]
 	path = concurrentqueue
 	url = https://github.com/cameron314/concurrentqueue
+[submodule "submodule/trompeloeil"]
+	path = submodule/trompeloeil
+	url = https://github.com/rollbear/trompeloeil/
+[submodule "submodule/cista"]
+	path = submodule/cista
+	url = https://github.com/felixguendling/cista
+[submodule "submodule/doctest"]
+	path = submodule/doctest
+	url = https://github.com/onqtam/doctest
+[submodule "submodule/Catch2"]
+	path = submodule/Catch2
+	url = https://github.com/catchorg/Catch2/
