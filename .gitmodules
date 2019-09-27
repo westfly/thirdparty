@@ -19,3 +19,15 @@
 [submodule "submodule/Catch2"]
 	path = submodule/Catch2
 	url = https://github.com/catchorg/Catch2/
+[submodule "submodule/spdlog"]
+	path = submodule/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "submodule/flatbuffers"]
+	path = submodule/flatbuffers
+	url = https://github.com/google/flatbuffers
+[submodule "submodule/magic_enum"]
+	path = submodule/magic_enum
+	url = https://github.com/Neargye/magic_enum
+[submodule "submodule/nameof"]
+	path = submodule/nameof
+	url = https://github.com/Neargye/nameof
