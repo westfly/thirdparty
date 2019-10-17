@@ -1,6 +1,6 @@
 function select_compiler() {
  #https://stackoverflow.com/questions/17275348/how-to-specify-new-gcc-path-for-cmake
- devtool=/opt/rh/devtoolset-7/root/usr/
+ devtool=/opt/rh/devtoolset-8/root/usr/
  export CC=$devtool/bin/gcc
  export CXX=$devtool/bin/g++
 }

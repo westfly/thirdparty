@@ -491,6 +491,8 @@ struct ServiceDef : public Definition {
 
 // Container of options that may apply to any of the source/text generators.
 struct IDLOptions {
+  // Use flexbuffers instead for binary and text generation
+  bool use_flexbuffers;
   bool strict_json;
   bool skip_js_exports;
   bool use_goog_js_export_format;
@@ -514,6 +516,7 @@ struct IDLOptions {
   std::string cpp_object_api_string_type;
   bool cpp_object_api_string_flexible_constructor;
   bool gen_nullable;
+  bool java_checkerframework;
   bool gen_generated;
   std::string object_prefix;
   std::string object_suffix;
@@ -572,7 +575,8 @@ struct IDLOptions {
   bool set_empty_to_null;
 
   IDLOptions()
-      : strict_json(false),
+      : use_flexbuffers(false),
+        strict_json(false),
         skip_js_exports(false),
         use_goog_js_export_format(false),
         use_ES6_js_export_format(false),
@@ -594,6 +598,7 @@ struct IDLOptions {
         cpp_object_api_pointer_type("std::unique_ptr"),
         cpp_object_api_string_flexible_constructor(false),
         gen_nullable(false),
+        java_checkerframework(false),
         gen_generated(false),
         object_suffix("T"),
         union_value_namespacing(true),
@@ -705,6 +710,7 @@ class Parser : public ParserState {
   explicit Parser(const IDLOptions &options = IDLOptions())
       : current_namespace_(nullptr),
         empty_namespace_(nullptr),
+        flex_builder_(256, flexbuffers::BUILDER_FLAG_SHARE_ALL),
         root_struct_def_(nullptr),
         opts(options),
         uses_flexbuffers_(false),
@@ -906,6 +912,8 @@ class Parser : public ParserState {
   std::string error_;         // User readable error_ if Parse() == false
 
   FlatBufferBuilder builder_;  // any data contained in the file
+  flexbuffers::Builder flex_builder_;
+  flexbuffers::Reference flex_root_;
   StructDef *root_struct_def_;
   std::string file_identifier_;
   std::string file_extension_;
