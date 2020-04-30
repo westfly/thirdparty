@@ -1,8 +1,10 @@
 function select_compiler() {
  #https://stackoverflow.com/questions/17275348/how-to-specify-new-gcc-path-for-cmake
- devtool=/opt/rh/devtoolset-7/root/usr/
- export CC=$devtool/bin/gcc
- export CXX=$devtool/bin/g++
+ devtool=/opt/rh/devtoolset-8/root/usr/
+ if [[ -d $devtool ]]; then
+     export CC=$devtool/bin/gcc
+     export CXX=$devtool/bin/g++
+ fi
 }
 function cmake_build() {
     source_dir=$1
@@ -32,7 +34,7 @@ function deploy() {
     if [[ ! -d $deploy/bin ]];then
         mkdir $deploy/bin
     fi
-    cp $source_dir/build/bin/* $deploy/bin/
+    #cp $source_dir/build/bin/* $deploy/bin/
 
     if [[ ! -d $deploy/lib64_release ]];then
         mkdir $deploy/lib64_release
